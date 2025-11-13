@@ -1,0 +1,188 @@
+/* Estilos Gerais */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+/* 🗺️ Estilos do Mapa */
+.mapa-container {
+    /* AJUSTE ESTES VALORES para a largura e altura reais da sua imagem */
+    width: 650px; 
+    height: 1000px;
+    margin: 0 auto;
+    /* 🖼️ CERTIFIQUE-SE QUE SUA IMAGEM CHAMA new.png */
+    background-image: url('new.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative; 
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 🖱️ Estilos das Mesas Clicáveis */
+.mesa {
+    /* Tamanho da área clicável */
+    width: 35px; 
+    height: 35px; 
+    background-color: rgba(255, 255, 255, 0); 
+    position: absolute; 
+    border: 0px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 35px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* 📌 POSICIONAMENTO DAS MESAS - VOCÊ DEVE AJUSTAR ESTES VALORES */
+/* style.css - CÓDIGO DE POSICIONAMENTO PARA MESAS 01 a 39 */
+
+/* LINHA 1 */
+#mesa-01 { top: 320px; left: 304px; }
+#mesa-02 { top: 320px; left: 256px; }
+#mesa-03 { top: 320px; left: 208px; }
+#mesa-04 { top: 320px; left: 162px; }
+#mesa-05 { top: 277px; left: 162px; }
+#mesa-06 { top: 277px; left: 208px; }
+#mesa-07 { top: 277px; left: 256px; }
+#mesa-08 { top: 277px; left: 304px; }
+#mesa-09 { top: 235px; left: 304px; }
+
+/* LINHA 2 */
+#mesa-10 { top: 235px; left: 256px; }
+#mesa-11 { top: 192px; left: 256px; }
+#mesa-12 { top: 192px; left: 304px; }
+#mesa-13 { top: 149px; left: 304px; }
+#mesa-14 { top: 149px; left: 256px; }
+#mesa-15 { top: 106px; left: 304px; }
+#mesa-16 { top: 106px; left: 256px; }
+#mesa-17 { top: 106px; left: 207px; }
+#mesa-18 { top: 106px; left: 160px; }
+#mesa-19 { top: 106px; left: 110px; }
+
+/* LINHA 3 */
+#mesa-20 { top: 106px; left: 60px; }
+#mesa-21 { top: 63px; left: 60px; }
+#mesa-22 { top: 63px; left: 110px; }
+#mesa-23 { top: 63px; left: 160px; }
+#mesa-24 { top: 63px; left: 208px; }
+#mesa-25 { top: 63px; left: 256px; }
+#mesa-26 { top: 63px; left: 304px; }
+#mesa-27 { top: 364px; left: 161px; }
+#mesa-28 { top: 364px; left: 209px; }
+#mesa-29 { top: 364px; left: 256px; }
+
+/* LINHA 4 */
+#mesa-31 { top: 879px; left: 169px; }
+#mesa-32 { top: 879px; left: 218px; }
+#mesa-33 { top: 879px; left: 268px; }
+#mesa-34 { top: 836px; left: 293px; }
+#mesa-35 { top: 781px; left: 293px; }
+#mesa-36 { top: 726px; left: 293px; }
+#mesa-37 { top: 672px; left: 293px; }
+#mesa-38 { top: 616px; left: 293px; }
+#mesa-39 { top: 560px; left: 293px; }
+/* 📌 FIM DO POSICIONAMENTO */
+
+/* Estado da Mesa Ocupada */
+.mesa.ocupada {
+    background-color: rgba(255, 0, 0, 0.7); /* Fundo vermelho quando ocupada */
+    border-color: red;
+    color: white;
+}
+
+.mesa:hover {
+    box-shadow: 0 0 5px orange;
+}
+
+.mesa .numero {
+    display: inline-block; 
+}
+
+.mesa .x-status {
+    display: none; 
+    font-size: 20px;
+    color: white;
+}
+
+.mesa.ocupada .numero {
+    display: none; 
+}
+
+.mesa.ocupada .x-status {
+    display: block; 
+    line-height: 35px;
+}
+
+/* 📝 Estilos do Modal (Pop-up) */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 350px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: left; /* Alinha o texto interno do modal */
+}
+
+.modal-content label, .modal-content input, .modal-content textarea, .modal-content button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.modal-content input, .modal-content textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal-content button {
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-ocupar { background-color: #4CAF50; color: white; }
+.btn-liberar { background-color: #f44336; color: white; }
+.btn-fechar { background-color: #ccc; color: #333; }
+
+/* Estilo do botão de exportação */
+#btn-exportar {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#btn-exportar:hover {
+    background-color: #0056b3;
+}
