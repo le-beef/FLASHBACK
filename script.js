@@ -1,5 +1,5 @@
 // Proteção Simples (Não segura)
-const senhaCorreta = "8182"; 
+const senhaCorreta = "818283"; 
 let acessoPermitido = false;
 
 while (!acessoPermitido) {
@@ -17,7 +17,7 @@ while (!acessoPermitido) {
 // O restante do seu script.js só rodará se a senha estiver correta.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Seletores
+    // 1. Seletores (Mantidos)
     const mesas = document.querySelectorAll('.mesa');
     const modalOverlay = document.getElementById('modal-mesa');
     const modalDisplayId = document.getElementById('mesa-id-display');
@@ -28,23 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let mesaSelecionada = null;
 
-    // 2. 💾 Carregar dados do LocalStorage ao iniciar
+    // 2. ☁️ CARREGAR DADOS DO FIREBASE EM TEMPO REAL
+    // Usamos 'refMesas' definido no seu HTML para monitorar mudanças
     const carregarStatusMesas = () => {
-        mesas.forEach(mesa => {
-            const status = localStorage.getItem(`mesa-${mesa.id}-status`);
-            const dados = localStorage.getItem(`mesa-${mesa.id}-dados`);
+        // O Firebase vai chamar esta função toda vez que os dados mudarem (em qualquer dispositivo)
+        refMesas.on('value', (snapshot) => {
+            const statusAtualizado = snapshot.val(); // Obtém todos os dados das mesas
+            
+            mesas.forEach(mesa => {
+                const mesaId = mesa.id; // Ex: "mesa-26"
+                const statusMesa = statusAtualizado && statusAtualizado[mesaId] ? statusAtualizado[mesaId] : null;
 
-            if (status === 'ocupada') {
-                mesa.classList.add('ocupada');
-                mesa.dataset.dados = dados;
-            } else {
-                mesa.classList.remove('ocupada');
-                delete mesa.dataset.dados;
-            }
+                if (statusMesa && statusMesa.status === 'ocupada') {
+                    mesa.classList.add('ocupada');
+                    // Salva os dados no elemento DOM para uso temporário
+                    mesa.dataset.dados = JSON.stringify({ nome: statusMesa.nome, obs: statusMesa.obs }); 
+                } else {
+                    mesa.classList.remove('ocupada');
+                    delete mesa.dataset.dados;
+                }
+            });
         });
     };
 
-    // 3. 🖱️ Adicionar ouvinte de clique para cada mesa
+    // 3. 🖱️ Adicionar ouvinte de clique para cada mesa (Inalterado)
     mesas.forEach(mesa => {
         mesa.addEventListener('click', () => {
             mesaSelecionada = mesa;
@@ -54,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalDisplayId.textContent = mesaNome;
             btnLiberar.dataset.mesaId = mesa.id;
 
-            // Preenche o formulário se a mesa já estiver ocupada
+            // Preenche o formulário
             if (isOcupada && mesa.dataset.dados) {
                 const dados = JSON.parse(mesa.dataset.dados);
                 document.getElementById('nome-ocupante').value = dados.nome || '';
@@ -62,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnLiberar.style.display = 'block';
                 document.querySelector('.btn-ocupar').textContent = 'Atualizar Ocupação';
             } else {
-                // Limpa e prepara o formulário para uma nova ocupação
                 formOcupacao.reset();
                 btnLiberar.style.display = 'none';
                 document.querySelector('.btn-ocupar').textContent = 'Confirmar Ocupação';
@@ -72,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. 📝 Lógica de Ocupar/Atualizar
+    // 4. ☁️ Lógica de Ocupar/Atualizar - AGORA SALVA NO FIREBASE
     formOcupacao.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -80,102 +86,95 @@ document.addEventListener('DOMContentLoaded', () => {
             const nome = document.getElementById('nome-ocupante').value;
             const obs = document.getElementById('observacoes').value;
             
-            const dadosOcupacao = JSON.stringify({ nome, obs, timestamp: new Date().toISOString() });
+            const dadosParaFirebase = {
+                status: 'ocupada',
+                nome: nome,
+                obs: obs,
+                timestamp: new Date().toISOString()
+            };
 
-            // Salva no LocalStorage
-            localStorage.setItem(`mesa-${mesaSelecionada.id}-status`, 'ocupada');
-            localStorage.setItem(`mesa-${mesaSelecionada.id}-dados`, dadosOcupacao);
-
-            // Atualiza a interface da mesa
-            mesaSelecionada.classList.add('ocupada');
-            mesaSelecionada.dataset.dados = dadosOcupacao;
-
-            modalOverlay.style.display = 'none';
-            alert(`Mesa ${mesaSelecionada.dataset.nome} ocupada/atualizada!`);
+            // SALVA NO FIREBASE: A função carregarStatusMesas atualiza a interface
+            refMesas.child(mesaSelecionada.id).set(dadosParaFirebase)
+                .then(() => {
+                    modalOverlay.style.display = 'none';
+                    alert(`Mesa ${mesaSelecionada.dataset.nome} ocupada/atualizada e sincronizada!`);
+                })
+                .catch(error => {
+                    alert("Erro ao salvar no Firebase: " + error.message);
+                });
         }
     });
 
-    // 5. 🗑️ Lógica de Liberar
+    // 5. ☁️ Lógica de Liberar - AGORA REMOVE DO FIREBASE
     btnLiberar.addEventListener('click', () => {
         if (mesaSelecionada) {
-            // Remove do LocalStorage
-            localStorage.removeItem(`mesa-${mesaSelecionada.id}-status`);
-            localStorage.removeItem(`mesa-${mesaSelecionada.id}-dados`);
-            
-            // Atualiza a interface
-            mesaSelecionada.classList.remove('ocupada');
-            delete mesaSelecionada.dataset.dados;
-            
-            modalOverlay.style.display = 'none';
-            alert(`Mesa ${mesaSelecionada.dataset.nome} liberada!`);
+            // REMOVE O DADO DO FIREBASE
+            refMesas.child(mesaSelecionada.id).remove()
+                .then(() => {
+                    modalOverlay.style.display = 'none';
+                    alert(`Mesa ${mesaSelecionada.dataset.nome} liberada e sincronizada!`);
+                })
+                .catch(error => {
+                    alert("Erro ao liberar no Firebase: " + error.message);
+                });
         }
     });
 
-    // 6. Fechar Modal
+    // 6. Fechar Modal (Inalterado)
     btnFechar.addEventListener('click', () => {
         modalOverlay.style.display = 'none';
     });
     
-    // 7. 📊 Lógica de Exportação para CSV (AGORA INCLUI MESAS VAZIAS)
+    // 7. 📊 Lógica de Exportação para CSV (AGORA LÊ O ESTADO ATUAL)
     btnExportar.addEventListener('click', () => {
-        // Cabeçalho do CSV
-        let dadosCSV = "Mesa;Status;Nome dos Ocupantes;Observacoes\n";
-        
-        // Flag para garantir que temos pelo menos 1 mesa (além do cabeçalho)
-        let mesasEncontradas = false;
-
-        mesas.forEach(mesa => {
-            const mesaId = mesa.id;
-            const mesaNome = mesa.dataset.nome;
-            const status = localStorage.getItem(`mesa-${mesaId}-status`);
+        // Pega o estado atual do Firebase (não espera o real-time)
+        refMesas.once('value').then((snapshot) => {
+            const statusFirebase = snapshot.val() || {};
             
-            let statusDisplay = "LIVRE";
-            let nomeOcupante = "";
-            let obs = "";
+            let dadosCSV = "Mesa;Status;Nome dos Ocupantes;Observacoes\n";
+            let mesasEncontradas = false;
 
-            if (status === 'ocupada') {
-                const dadosRaw = localStorage.getItem(`mesa-${mesaId}-dados`);
-                
-                if (dadosRaw) {
-                    try {
-                        const dados = JSON.parse(dadosRaw);
-                        // Limpa o texto para evitar quebras no CSV (substitui ';' por ',')
-                        nomeOcupante = dados.nome ? dados.nome.replace(/;/g, ',') : "";
-                        obs = dados.obs ? dados.obs.replace(/;/g, ',') : "";
-                    } catch (e) {
-                        console.error("Erro ao parsear dados da mesa", mesaNome, e);
-                    }
+            mesas.forEach(mesa => {
+                const mesaId = mesa.id;
+                const mesaNome = mesa.dataset.nome;
+                const statusDados = statusFirebase[mesaId];
+
+                let statusDisplay = "LIVRE";
+                let nomeOcupante = "";
+                let obs = "";
+
+                if (statusDados && statusDados.status === 'ocupada') {
+                    statusDisplay = "OCUPADA";
+                    // Limpa o texto para evitar quebras no CSV (substitui ';' por ',')
+                    nomeOcupante = statusDados.nome ? statusDados.nome.replace(/;/g, ',') : "";
+                    obs = statusDados.obs ? statusDados.obs.replace(/;/g, ',') : "";
                 }
-                statusDisplay = "OCUPADA";
+                
+                // Adiciona a linha ao CSV
+                dadosCSV += `${mesaNome};${statusDisplay};${nomeOcupante};${obs}\n`;
+                mesasEncontradas = true;
+            });
+
+            if (!mesasEncontradas) {
+                alert("Nenhuma mesa foi encontrada para exportação. Verifique se as mesas foram adicionadas ao HTML.");
+                return;
             }
+
+            // Cria e inicia o download do arquivo
+            const nomeArquivo = `Status_Mesas_${new Date().toISOString().slice(0, 10)}.csv`;
+            const blob = new Blob(['\ufeff', dadosCSV], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             
-            // Adiciona a linha ao CSV, independente do status (LIVRE ou OCUPADA)
-            // Formato: Mesa;Status;Nome dos Ocupantes;Observacoes
-            dadosCSV += `${mesaNome};${statusDisplay};${nomeOcupante};${obs}\n`;
-            mesasEncontradas = true;
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', nomeArquivo);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
-
-        if (!mesasEncontradas) {
-            alert("Nenhuma mesa foi encontrada para exportação. Verifique se as mesas foram adicionadas ao HTML.");
-            return;
-        }
-
-        // 🔗 Cria e inicia o download do arquivo
-        const nomeArquivo = `Status_Mesas_${new Date().toISOString().slice(0, 10)}.csv`;
-        // Adiciona a marca BOM para garantir que acentos e caracteres especiais (UTF-8) funcionem no Excel
-        const blob = new Blob(['\ufeff', dadosCSV], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', nomeArquivo);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     });
 
     // Inicia o carregamento
     carregarStatusMesas();
-
 });

@@ -9,7 +9,7 @@
 <body>
 
     <h1>Mapa de Localização de Mesas - Le Beef</h1>
-    <h1>TRIBUTO - 29/11/2025 - 21H</h1>
+    <h1>Evento teste - Dia: 22/11/2025</h1>
     
     <button id="btn-exportar">📊 Exportar Lista de Ocupação (.csv)</button>
     <br><br>
@@ -190,7 +190,29 @@
         </div>
     </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+    // Cole o objeto firebaseConfig que você copiou do Firebase Console
+      const firebaseConfig = {
+    apiKey: "AIzaSyB6CZ9AI_cAmYM_QHjlTCC3ArO35G24SLY",
+    authDomain: "tributo-7d910.firebaseapp.com",
+    databaseURL: "https://tributo-7d910-default-rtdb.firebaseio.com",
+    projectId: "tributo-7d910",
+    storageBucket: "tributo-7d910.firebasestorage.app",
+    messagingSenderId: "959910736720",
+    appId: "1:959910736720:web:52cdb299948c14ea59b255"
+  };
+
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    // Cria uma referência para o seu banco de dados
+    const db = firebase.database(); 
+    const refMesas = db.ref('mesas_status'); // Onde os dados serão salvos
+</script>
+
+<script src="./script.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
