@@ -13,7 +13,7 @@ h1 {
 /* 🗺️ Estilos do Mapa */
 .mapa-container {
     /* AJUSTE ESTES VALORES para a largura e altura reais da sua imagem */
-    width: 650px; 
+    width: 560px; 
     height: 1000px;
     margin: 0 auto;
     /* 🖼️ CERTIFIQUE-SE QUE SUA IMAGEM CHAMA new.png */
@@ -185,4 +185,5 @@ h1 {
 
 #btn-exportar:hover {
     background-color: #0056b3;
+
 }
