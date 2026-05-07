@@ -1,11 +1,11 @@
 // LOGIN PERSISTENTE
 const senhaCorreta = "7878";
 
-// LIMPA TESTE ANTIGO (use só 1 vez se quiser resetar)
-// localStorage.removeItem("logado");
+// IDENTIFICADOR DA SENHA
+const VERSAO_LOGIN = "7878";
 
 // VERIFICA LOGIN
-if (localStorage.getItem("logado") !== "sim") {
+if (localStorage.getItem("logado") !== VERSAO_LOGIN) {
 
     let acessoPermitido = false;
 
@@ -25,7 +25,7 @@ if (localStorage.getItem("logado") !== "sim") {
             acessoPermitido = true;
 
             // SALVA LOGIN
-            localStorage.setItem("logado", "sim");
+            localStorage.setItem("logado", VERSAO_LOGIN);
 
             alert("Acesso concedido!");
 
@@ -36,6 +36,7 @@ if (localStorage.getItem("logado") !== "sim") {
         }
     }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Seletores
     const mesas = document.querySelectorAll('.mesa');
