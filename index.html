@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Mesas FlashBack</title>
+    <title>Mapa de Mesas Le Beef</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+    
     <h1>Mapa de Mesas - Le Beef</h1>
     <h2>BALADA FLASHBACK<br>16/05/2026 - 20H</h2>
     <br>
@@ -171,15 +171,15 @@
             <span class="numero">39</span>
             <span class="x-status">X</span> 
         </div>
-
-    </div> <br>
+  </div>
     
+    <br>
     <div class="lista-ocupacao-container">
-        <h3>🪑 Mesas Ocupadas Atualmente (<span id="contador-ocupadas">0</span>)</h3>
-        <ul id="lista-mesas-ocupadas">
-            <li>Nenhuma mesa ocupada no momento.</li>
-        </ul>
-    </div>
+    <h3>🪑 Mesas (<span id="contador-mesas">0</span>) | 👥 Pessoas (<span id="contador-pessoas">0</span>)</h3>
+    <ul id="lista-mesas-ocupadas">
+        <li>Nenhuma mesa ocupada no momento.</li>
+    </ul>
+</div>
 
     <div id="modal-mesa" class="modal-overlay">
         <div class="modal-content">
@@ -187,7 +187,7 @@
                 <h2>Mesa: <span id="mesa-id-display"></span></h2>
             </div>
             <form id="form-ocupacao">
-                <div class="form-row">
+		    <div class="form-row">
                     <div class="form-group full-width">
                         <label for="nome-ocupante">Nome dos Ocupantes:</label>
                         <input type="text" id="nome-ocupante" required placeholder="Ex: João Silva">
@@ -231,12 +231,14 @@
             </form>
         </div>
     </div>
-
-<div class="botoes-rodape">
-        <button id="btn-reset-geral" class="btn-perigo">⚠️ Resetar Todas as Mesas</button>
+</div>
     </div>
     
-    <footer class="rodape-versao">
+    <div class="botoes-rodape">
+        <button id="btn-reset-geral" class="btn-perigo">⚠️ Resetar Todas as Mesas</button>
+    </div>
+<footer class="rodape-versao">
+                  
         <div class="info-versao">
             Le Beef | Versão: 2.4.1
         </div>
@@ -247,7 +249,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-      // Cole o objeto firebaseConfig que você copiou do Firebase Console
+
+       // Cole o objeto firebaseConfig que você copiou do Firebase Console
       const firebaseConfig = {
         // Seus dados de configuração do Firebase
         apiKey: "AIzaSyB6CZ9AI_cAmYM_QHjlTCC3ArO35G24SLY",
@@ -259,13 +262,16 @@
         appId: "1:959910736720:web:52cdb299948c14ea59b255"
       };
 
-      // Inicializa o Firebase
-      firebase.initializeApp(firebaseConfig);
-      // Cria uma referência para o seu banco de dados
-      const db = firebase.database(); 
-      const refMesas = db.ref('mesas_status'); // Onde os dados serão salvos
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        // Cria uma referência para o seu banco de dados
+        const db = firebase.database(); 
+        const refMesas = db.ref('mesas_status'); // Onde os dados serão salvos
     </script>
     <script src="./script.js"></script>
-
 </body>
+
 </html>
+
+
+
