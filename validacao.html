@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Validação Le Beef</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<link rel="stylesheet" href="validacao.css">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🍷 LE BEEF VALIDAÇÃO</h1>
+    <!-- EXIBIÇÃO DO EVENTO NA TELA -->
+
+    <h2 id="evento-info">
+
+        <span id="evento-nome">CARREGANDO...</span>
+
+        <br>
+
+        <span id="evento-data">...</span>
+
+    </h2>
+
+    <!-- VALIDAR QR/CÓDIGO -->
+  <button id="btn-camera" style="background: #333; color: #d4af37; margin-bottom: 15px;">
+        📷 ABRIR CÂMERA
+    </button>
+    
+    <div id="leitor" style="width: 100%; margin-bottom: 20px; display: none; border-radius: 12px; overflow: hidden;"></div>
+
+    <input
+        type="text"
+        id="codigo"
+        placeholder="Digite ou escaneie o código"
+    >
+
+    <button id="btn-validar">
+        VALIDAR ENTRADA
+    </button>
+
+    <hr>
+
+    <!-- PESQUISA -->
+    <h3>🔎 Buscar Reserva</h3>
+
+    <input
+        type="text"
+        id="pesquisa"
+        placeholder="Mesa ou nome do responsável"
+    >
+
+    <div class="acoes-busca">
+
+    <button id="btn-pesquisar">
+        🔎 PESQUISAR
+    </button>
+
+    <button id="btn-listar">
+        📋 LISTAR TODAS
+    </button>
+
+</div>
+
+    <div id="resultado"></div>
+    <div id="totais-gerais"></div>
+
+</div>
+
+<script>
+
+// Cole o objeto firebaseConfig que você copiou do Firebase Console
+        const firebaseConfig = {
+  apiKey: "AIzaSyB6CZ9AI_cAmYM_QHjlTCC3ArO35G24SLY",
+  authDomain: "tributo-7d910.firebaseapp.com",
+  databaseURL: "https://tributo-7d910-default-rtdb.firebaseio.com",
+  projectId: "tributo-7d910",
+  storageBucket: "tributo-7d910.firebasestorage.app",
+  messagingSenderId: "959910736720",
+  appId: "1:959910736720:web:52cdb299948c14ea59b255"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+const refReservas =
+db.ref("reservas_vip");
+
+    
+    // FUNÇÃO QUE BUSCA OS DADOS NO INDEX.HTML
+
+    async function puxarDadosDoIndex() {
+
+        try {
+
+            const resposta = await fetch('./index.html');
+
+            if (!resposta.ok) throw new Error();
+
+            
+
+            const htmlTexto = await resposta.text();
+
+            const parser = new DOMParser();
+
+            const docIndex = parser.parseFromString(htmlTexto, 'text/html');
+
+            
+
+            const nomeNoIndex = docIndex.getElementById('evento-nome');
+
+            const dataNoIndex = docIndex.getElementById('evento-data');
+
+            
+
+            if (nomeNoIndex) document.getElementById('evento-nome').innerText = nomeNoIndex.innerText.trim().toUpperCase();
+
+            if (dataNoIndex) document.getElementById('evento-data').innerText = dataNoIndex.innerText.trim().toUpperCase();
+
+            
+
+        } catch (error) {
+
+            document.getElementById('evento-nome').innerText = "BANDA FÊNIX";
+
+            document.getElementById('evento-data').innerText = "06/06/2026 - 21H";
+
+        }
+
+    }
+
+
+
+    puxarDadosDoIndex();
+
+</script>
+
+<script src="validacao.js"></script>
+
+</body>
+</html>

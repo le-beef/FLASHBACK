@@ -8,12 +8,33 @@
 </head>
 <body>
     
-    <h1>Mapa de Mesas - Le Beef</h1>
-    <h2>FLASH ROCK <br>10/07/2026 - 22H</h2>
+   <h1>Mapa de Mesas - Le Beef</h1>
+   <h2 id="evento-info">
+
+    <span id="evento-nome">
+        BAILÃO DA COPA
+    </span>
+
     <br>
 
+    <span id="evento-data">
+        20/06/2026 - 21H
+    </span>
+
+</h2>
+    <br>
     <button id="btn-exportar">📊 Exportar Lista de Ocupação (.csv)</button>
-    <br><br>
+    <br>
+
+<div class="atalhos">
+    <a href="https://le-beef.github.io/FLASHBACK/ingresso_avulso.html" target="_blank" class="btn-atalho ingresso">
+        INGRESSO AVULSO
+    </a>
+
+    <a href="https://le-beef.github.io/FLASHBACK/validacao.html" target="_blank" class="btn-atalho validacao">
+        VALIDAÇÃO
+    </a>
+</div>
 
     <div class="mapa-container">
         <div id="mesa-01" class="mesa livre" data-nome="01 - Salao">
@@ -223,11 +244,27 @@
                     </div>
                 </div>
 
-                <div class="botoes-modal">
-                    <button type="submit" class="btn-ocupar">Confirmar</button>
-                    <button type="button" class="btn-liberar" data-mesa-id="">Liberar</button>
-                    <button type="button" class="btn-fechar">Fechar</button> 
-                </div>
+           <div class="botoes-modal">
+    <button type="submit" class="btn-ocupar">
+        Confirmar
+    </button>
+
+    <button type="button" id="btn-emitir-vale">
+        Emitir Vale
+    </button>
+
+	<button id="btn-baixar-vale">
+	Baixar Vale
+   </button>
+
+    <button type="button" class="btn-liberar" data-mesa-id="">
+        Liberar
+    </button>
+
+    <button type="button" class="btn-fechar">
+        Fechar
+    </button>
+</div>
             </form>
         </div>
     </div>
@@ -240,7 +277,7 @@
 <footer class="rodape-versao">
                   
         <div class="info-versao">
-            Le Beef | Versão: 2.4.1
+            Le Beef | Versão: 3.0.1
         </div>
     </footer>
 
@@ -250,7 +287,9 @@
 
     <script>
 
+
        // Cole o objeto firebaseConfig que você copiou do Firebase Console
+
       const firebaseConfig = {
         // Seus dados de configuração do Firebase
         apiKey: "AIzaSyB6CZ9AI_cAmYM_QHjlTCC3ArO35G24SLY",
@@ -267,7 +306,11 @@
         // Cria uma referência para o seu banco de dados
         const db = firebase.database(); 
         const refMesas = db.ref('mesas_status'); // Onde os dados serão salvos
-    </script>
+	const refReservas = db.ref('reservas_vip');
+   </script>
+	<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script src="./script.js"></script>
 </body>
 

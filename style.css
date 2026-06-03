@@ -81,7 +81,8 @@ h2 {
     transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* 📌 POSICIONAMENTO DAS MESAS - Estes valores dependem da imagem de fundo */
+
+/* 📌 POSICIONAMENTO DAS MESAS - VOCÊ DEVE AJUSTAR ESTES VALORES */
 /* style.css - CÓDIGO DE POSICIONAMENTO PARA MESAS 01 a 39 */
 
 /* LINHA 1 */
@@ -130,6 +131,7 @@ h2 {
 #mesa-38 { top: 618px; left: 296px; }
 #mesa-39 { top: 562px; left: 296px; }
 /* 📌 FIM DO POSICIONAMENTO */
+
 
 /* Estado da Mesa Ocupada */
 .mesa.ocupada {
@@ -237,6 +239,18 @@ h2 {
 .btn-liberar { background-color: #e74c3c; color: white; }
 .btn-fechar { background-color: #95a5a6; color: white; }
 
+#btn-emitir-vale{
+    background: linear-gradient(135deg,#000,#1b1b1b);
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    font-weight: bold;
+}
+
+#btn-emitir-vale:hover{
+    transform: scale(1.03);
+    transition: .2s;
+}
+
 /* Estilo do botão de exportação */
 #btn-exportar {
     padding: 10px 20px;
@@ -328,5 +342,49 @@ h2 {
     }
 }
 
+/* botao de links */
+
+.atalhos {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+/* botão base */
+.btn-atalho {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: white;
+    transition: 0.25s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    letter-spacing: 0.5px;
+}
+
+/* botão ingresso */
+.btn-atalho.ingresso {
+    background: linear-gradient(135deg, #ff7a18, #af002d);
+}
+
+/* botão validação */
+.btn-atalho.validacao {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+/* efeito hover */
+.btn-atalho:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    filter: brightness(1.1);
+}
+
+/* efeito clique */
+.btn-atalho:active {
+    transform: scale(0.97);
+}
 
 
